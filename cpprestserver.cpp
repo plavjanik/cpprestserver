@@ -6,7 +6,9 @@ int main(int argc, const char *argv[])
     served::multiplexer mux;
     mux.handle("/api/v1/greeting")
         .get([&](served::response &res, const served::request &req) {
-            res << "{ \"content\": \"Hello, " << req.query["name"] << "!\" }\n";
+            std::string name = req.query["name"];
+            res.set_header("content-type", "application/json");
+            res << "{ \"content\": \"Hello, " << ((name.length() > 0) ? name : "world") << "!\" }\n";
         });
 
     std::cout << "Try this example with:" << std::endl;
